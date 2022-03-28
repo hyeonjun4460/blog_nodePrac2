@@ -124,7 +124,91 @@ main {
     border: 1px solid black;
     text-align: left;
 }
+
+.commentdiv{
+    width: 100%;
+    border: 1px solid black
+}
+
+.commentdiv > table > thead{
+    border: 1px solid black
+
+}
+
+.commentdiv > thead > tr:first-child{
+    width: 80%;
+}
+
+.table{
+    margin-top: 20px;
+}
+
+
+.commentPost{
+    width: 30%;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.commentPost > input{
+    margin-top: 20px;
+    width: 50%;
+}
+
+.commentInput{
+    margin-bottom: 10px;
+}
+
+.commentPostBtn{
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+    margin-bottom: 20px;
+    margin-right: 20px;
+}
     </style>
+
+    <script>
+        $(document).ready(function(){
+            if (localStorage.length !== 0){
+                getSelf()
+            }
+            
+        })
+
+        function getSelf() {
+            $.ajax({
+                type: "GET",
+                url: "/posts/users/me",
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                success: function (response) {
+                    $('#commentbtn').show()
+                    },
+                error: function (xhr, status, error) {
+                    if (status == 401) {
+                        alert("로그인이 필요합니다.");
+                    } else {
+                        localStorage.clear();
+                        alert("알 수 없는 문제가 발생했습니다. 관리자에게 문의하세요.");
+                    }
+                    window.location.href = "/";
+                    },
+                });
+                }
+
+        function openCommentPost(){
+            $('#commentPost').show()
+        }
+
+        function commentpost(){
+            console.log('hi')
+        }
+    </script>
 </head>
 <body>
     <header class="title">
@@ -146,7 +230,30 @@ main {
                     <p id = 'content'class = 'last'>내용: <%= post[0]['content']%></p>
                     <div class="btn">
                         <button onclick="window.location.href = '/posts'">뒤로가기</button>
+                        <button id = 'commentbtn' style = 'display: none;' onclick = 'openCommentPost()'>댓글 작성하기</button>
                     </div>
+                    <div id = 'commentPost'class = 'commentPost' style = "display: none;">
+                        <input type="text" placeholder="닉네임">
+                        <input class = 'commentInput'type="text" placeholder="댓글 내용">
+                        <div class = 'commentPostBtn'>
+                            <button onclick = "$('#commentPost').hide()" style = "margin-left: 10px;">닫기</button>
+                            <button onclick = "commentpost()">댓글 등록하기</button>
+                        </div>
+                    </div>
+                    <table id='placetable' class='table'>
+                        <thead>
+                        <tr>
+                            <td style="width: 10%;" >작성자명</td>
+                            <td stlye= "width: 90%;">제목</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>작성자입니다.</td>
+                                <td>작성 내용입니다.</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

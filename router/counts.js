@@ -70,7 +70,13 @@ router.delete('/:count/edit', async (req, res) => {
     }
 })
 // 상세 게시글 - 댓글 POST API
+router.post('/:count/comment', async (req, res) => {
 
+    // 클라이언트에서 보내는 값 받아오기
+    // 게시물 번호 가져오기
+    // db 스키마 짜기
+
+})
 //router.post()
 // 댓글 POST API with DB 스키마 제작(nickname, comment, userID_DB, contentID_DB)
 // 댓글 GET API to 상세페이지

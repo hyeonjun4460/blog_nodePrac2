@@ -21,6 +21,7 @@ app.use(express.json()) // json 형식 이용
 app.use(requestlog) // 로그 남기기
 app.use('/posts', [postsrouter, countrouter]) // /posts 접속시, postrouter의 내용 response
 app.use(express.static('views'))
+
 // 메인 페이지 생성 -> posts로 바로 이동하게 바꾸기
 app.get('/', (req, res) => {
     res.render('start')

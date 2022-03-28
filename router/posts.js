@@ -102,10 +102,7 @@ router.post('/upload', async (req, res) => {
     const { tokenid, nickname, title, password, content } = req.body
     // 토큰을 가진 사용자의 DB ID 가져오기
     const { userId } = jwt.verify(tokenid, 'my-secret-key')
-    console.log(userId)
-    console.log(userId)
     const userId_DB = await User.findOne({ _id: userId }).then((value) => { return value._id.toHexString() })
-    console.log(userId_DB)
     const date = new Date()
     // 비밀번호 암호화하기.
     const pw_hash = await bcrypt.hash(password, saltRounds).then((value) => { return value })
