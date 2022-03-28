@@ -125,12 +125,19 @@ main {
 
     </style>
     <script>
+
+
+        // 로컬 스토리지가 비어 있지 않으면, 사용자 인증 요청
+        // 토큰
         $(document).ready(function(){
+            
             if (localStorage.length !== 0){
                 getSelf()
             }
+            
         })
 
+        //  사용자 인증 요청
         function getSelf() {
             $.ajax({
                 type: "GET",
@@ -140,7 +147,17 @@ main {
                         },
                 success: function (response) {
                     let temp_html = `<button onclick = logout()>로그아웃</button>`
-                    $('#login').append(temp_html)
+                    $('#logdiv').append(temp_html)
+                    $('#loginbtn').hide()
+                    $('#postbtn').show()
+                    let currentUserId_DB = response.user._id
+                    let fixbtnclass = $('#fixbtn').attr('class').split('`')[1]
+                    console.log(currentUserId_DB, fixbtnclass)
+                    if (fixbtnclass === currentUserId_DB){
+                        $('#fixbtn').show()
+                    }
+
+
                     },
                 error: function (xhr, status, error) {
                     if (status == 401) {
@@ -169,18 +186,17 @@ main {
                 </h1>
             </div>
     </header>
-
     </div>
     <main>
         <div class="wrap">
             <div class="review">
                 <div class="showtable">
                     <div class="btns">
-                    <div id = 'login' class="register">
-                        <button onclick = 'window.location.href = "/posts/auth"'>로그인</button>
+                    <div id = 'logdiv' class="register">
+                        <button id = 'loginbtn' onclick = 'window.location.href = "/posts/auth"'>로그인</button>
                     </div>
                     <div class="btn">
-                        <button onclick="window.location.href = '/posts/upload'">글쓰기</button>
+                        <button style = "display: none" id = 'postbtn' onclick="window.location.href = '/posts/upload'">글쓰기</button>
                     </div>
                     </div>
                     <table id='placetable' class='table'>
@@ -194,15 +210,16 @@ main {
                         </thead>
                         <tbody id="recipeitems">
                             <% for (let i = 0; i < post.length; i++) { %>
-                                <% let id = post[i]['id'] %>
+                                <% let userId_DB = post[i]['userId_DB'] %>
+                                <% let nickname = post[i]['nickname'] %>
                                 <% let title = post[i]['title'] %>
                                 <% let date = post[i]['date'].slice(0,24) %>
                                 <% let count = post[i]['count']%>
-                                <tr class = 'click'"> <!-- 게시물 클릭 시, 상세 게시물 페이지로 전환 -->
+                                <tr class = 'click'> <!-- 게시물 클릭 시, 상세 게시물 페이지로 전환 -->
                                 <td onclick="window.location.href = `/posts/<%= count%>`"><%= date %></td>
-                                <td onclick="window.location.href = `/posts/<%= count%>`"><%= id %></td>
+                                <td onclick="window.location.href = `/posts/<%= count%>`"><%= nickname %></td>
                                 <td onclick="window.location.href = `/posts/<%= count%>`"><%= title %></td>
-                                <td onclick="window.location.href = `/posts/<%= count%>/edit`">수정하기</td>
+                                <td id = "fixbtn" style = "display: none"  class = `<%= userId_DB %>` onclick="window.location.href = `/posts/<%= count%>/edit`">수정하기</td>
                                 </tr>
                                 <% } %>
                         </tbody>

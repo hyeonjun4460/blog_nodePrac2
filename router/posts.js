@@ -15,7 +15,7 @@ const router = express.Router()
 
 // 전체 게시글 조회 API
 router.get('/', async (req, res) => {
-    const post = await (await Posts.find({}, { _id: false, pw: false, comment: false })).sort((a, b) => {
+    const post = await (await Posts.find({}, { _id: false, password: false, comment: false })).sort((a, b) => {
         if (a.count > b.count) {
             return -1
         }
@@ -76,9 +76,10 @@ router.post('/register', joimiddleware, async (req, res) => {
     const existUsers = await User.find({
         $or: [{ id }, { nickname }],
     });
+    // 아이디와 닉네임이 중복되지 않게 하기.
     if (existUsers.length) {
         res.status(400).send({
-            errorMessage: "이미 가입된 이메일 또는 닉네임이 있습니다.",
+            errorMessage: "이미 가입된 ID 또는 닉네임이 있습니다.",
         });
         return;
     }
@@ -96,8 +97,12 @@ router.get('/upload', (req, res) => {
 })
 
 // 게시글 POST API
+// userDB의DB ID로 작성자 = 로그인한 유저 여부를 인증.
 router.post('/upload', async (req, res) => {
-    const { id, title, pw, comment } = req.body
+    const { tokenid, nickname, title, password, content } = req.body
+    // 토큰을 가진 사용자의 DB ID 가져오기
+    const { userId } = jwt.verify(tokenid, 'my-secret-key')
+    const userId_DB = await User.findOne({ userId }).then((value) => { return value._id.toHexString() })
     const date = new Date()
     let count = 0
     posts = await Posts.find({})
@@ -109,10 +114,11 @@ router.post('/upload', async (req, res) => {
     }
     console.log(count, posts.length)
     await Posts.create({
-        id,
+        userId_DB,
+        nickname,
         title,
-        pw,
-        comment,
+        password,
+        content,
         date,
         count // 각 게시글에 고유값 지정 위해서...
     })
