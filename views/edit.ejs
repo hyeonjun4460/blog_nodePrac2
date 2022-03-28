@@ -125,6 +125,21 @@ main {
     text-align: left;
 }
 
+.contentdiv {
+    width: 100%;
+    display:flex;
+}
+.contentdiv > p {
+    width: 95%;
+    border: 1px solid black;
+    text-align: left;
+    margin-right: 10px;
+}
+.contentdiv > button{
+    width: 5%;
+    height: 26px
+}
+
 .delete{
     margin-left: 20px;
 }
@@ -135,14 +150,13 @@ main {
 
 // 게시글 수정 버튼
         function edit(){
-            let comment = $('#comment').val()
-            let pw = $('#pw').val()
-            console.log(id, title, comment, pw)
+            let content = $('#content').val()
+            let password = $('#password').val()
             $.ajax({
                 type: 'PUT',
                 url: `/posts/<%= post[0]['count'] %>/edit`,
                 data: {
-                comment, pw
+                content, password
                 },
                 success: function (response) {
                     if (response['success']){
@@ -158,14 +172,13 @@ main {
 
         // 게시글 삭제 버튼
         function shutdown(){
-            let comment = $('#comment').val()
-            let pw = $('#pw').val()
-            console.log(id, title, comment, pw)
+            let content = $('#content').val()
+            let password = $('#password').val()
             $.ajax({
                 type: 'DELETE',
                 url: `/posts/<%= post[0]['count'] %>/edit`,
                 data: {
-                comment, pw
+                content, password
                 },
                 success: function (response) {
                     if (response['success']){
@@ -177,6 +190,13 @@ main {
                     }
                 }
             });
+        }
+
+        function contentEdit(){
+            $('#content').replaceWith(function(){
+                return $('<input>', {type: 'text', id: 'content', value: `내용: <%= post[0]['content'] %>`, style: "width: 100%; margin-bottom: 20px"})
+            })
+            $('#contentEditBtn').hide( )
         }
     </script>
 </head>
@@ -195,10 +215,13 @@ main {
         <div class="wrap">
             <div class="review">
                 <div class="showtable">
-                    <p id = 'id'> ID: <%= post[0]['id'] %></p>
+                    <p id = 'nickname'> 닉네임: <%= post[0]['nickname'] %></p>
                     <p id = 'title'>제목: <%= post[0]['title']%></p>
-                    <input id = 'comment'class = 'last' value = "내용: <%= post[0]['comment'] %>">
-                    <input id = 'pw' type="password" placeholder="PW를 입력해주세요.">
+                    <div class = 'contentdiv' id = 'comment'>
+                        <p id = 'content'>내용: <%= post[0]['content'] %></p>
+                        <button id = 'contentEditBtn' onclick = 'contentEdit()'>내용 변경</button>
+                    </div>
+                    <input id = 'password' type="password" placeholder="PW를 입력해주세요.">
                     <div class="btn">
                         <button onclick="window.location.href = '/posts'">뒤로가기</button>
                         <button class = 'delete' onclick="shutdown()">삭제하기</button>
@@ -210,3 +233,5 @@ main {
     </main>
 </body>
 </html>
+
+<!--                     <input id = 'comment'class = 'last' value = "내용: <%= post[0]['comment'] %>"> -->

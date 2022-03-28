@@ -130,7 +130,6 @@ main {
         // 로컬 스토리지가 비어 있지 않으면, 사용자 인증 요청
         // 토큰
         $(document).ready(function(){
-            
             if (localStorage.length !== 0){
                 getSelf()
             }
@@ -156,8 +155,6 @@ main {
                     if (fixbtnclass === currentUserId_DB){
                         $('#fixbtn').show()
                     }
-
-
                     },
                 error: function (xhr, status, error) {
                     if (status == 401) {
