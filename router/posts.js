@@ -25,17 +25,6 @@ router.get('/', async (req, res) => {
     })
 })
 
-// 로그인 후 전체 게시글 조회 API
-router.get('/signin', async (req, res) => {
-    const post = await (await Posts.find({}, { _id: false, pw: false, comment: false })).sort((a, b) => {
-        if (a.count > b.count) {
-            return -1
-        }
-    }) // 작성날짜 기준 내림차순 정렬해서 return
-    res.render('../views/signin', {
-        post
-    })
-})
 
 // 로그인 페이지 조회 API
 router.get('/auth', (req, res) => {
@@ -101,7 +90,7 @@ router.post('/register', joimiddleware, async (req, res) => {
     res.status(201).send({ success: true, msg: '회원가입에 성공했습니다.' });
 })
 
-// 로그인 X API들 (토큰 들고 다니면 안됨)
+
 router.get('/upload', (req, res) => {
     res.render('../views/post')
 })
@@ -184,5 +173,5 @@ router.delete('/:count/edit', async (req, res) => {
 
 
 
-//  로그인 O API 
+
 module.exports = router

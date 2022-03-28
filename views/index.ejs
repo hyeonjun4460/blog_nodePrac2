@@ -125,6 +125,39 @@ main {
 
     </style>
     <script>
+        $(document).ready(function(){
+            if (localStorage.length !== 0){
+                getSelf()
+            }
+        })
+
+        function getSelf() {
+            $.ajax({
+                type: "GET",
+                url: "/posts/users/me",
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                success: function (response) {
+                    let temp_html = `<button onclick = logout()>로그아웃</button>`
+                    $('#login').append(temp_html)
+                    },
+                error: function (xhr, status, error) {
+                    if (status == 401) {
+                        alert("로그인이 필요합니다.");
+                    } else {
+                        localStorage.clear();
+                        alert("알 수 없는 문제가 발생했습니다. 관리자에게 문의하세요.");
+                    }
+                    window.location.href = "/";
+                    },
+                });
+                }
+
+        function logout(){
+            localStorage.clear()
+            window.location.href = '/posts'
+            }
     </script>
 </head>
 <body>
@@ -143,7 +176,7 @@ main {
             <div class="review">
                 <div class="showtable">
                     <div class="btns">
-                    <div class="register">
+                    <div id = 'login' class="register">
                         <button onclick = 'window.location.href = "/posts/auth"'>로그인</button>
                     </div>
                     <div class="btn">
