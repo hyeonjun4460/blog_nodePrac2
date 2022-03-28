@@ -122,7 +122,13 @@ main {
     </style>
 
     <script>
-
+        // 토큰이 이미 존재하면, 메인 페이지로 다시 보내기
+        $(document).ready(function(){
+            if (localStorage.length != 0){
+                alert('이미 로그인 되어 있습니다')
+                window.location.href = '/'
+            }
+        })
 // /posts/auth로 id, pw 입력값 post
     function auth(){
             let id = $('#id').val()
@@ -135,7 +141,7 @@ main {
                 },
                 success: function (response) {
                     localStorage.setItem("token", response.token);
-                    window.location.href = '/posts/signin'
+                    window.location.href = '/'
                 },
                 error: function (response){
                     alert(response.responseJSON.errormsg)

@@ -12,7 +12,6 @@ app.set('views', './views')
 const requestlog = (req, res, next) => {
     console.log('requested url', req.originalUrl, '-', new Date())
     next()
-
 }
 
 // 미들워어
