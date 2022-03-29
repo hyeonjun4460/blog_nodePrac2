@@ -193,7 +193,6 @@ main {
                 success: function (response) {
                     $('#commentEditbtns').show()
                     let currentUserId_DB = response.user._id
-                    console.log(document.getElementsByTagName('tr').length)
                     for ( let i =0; i < document.getElementsByTagName('tr').length-1; i++){
                         if (currentUserId_DB === $(`#commentEditbtns${i}`).attr('class'))
                         $(`#commentEditbtns${i}`).show()
@@ -247,6 +246,77 @@ main {
             });
 
         }
+
+
+
+
+        // 수정 내용 '' 값은 validation 하기
+        function editShow(num){
+            console.log(num)
+            $(`#currentComment${num}`).replaceWith(function(){
+                return $('<input>', {type: 'text', id: `currentComment${num}`,style: "width: 90%; padding-top: 5px; padding-bottom: 0;"})
+            })
+            $(`#commentEditBtn${num}`).hide()
+            $(`#commentDeleteBtn${num}`).hide()
+            let temp_html = `<button onclick = commentEdit(${num})>저장</button>
+                            <button onclick = goback()>뒤로 가기</button>
+            `
+            $(`#commentBtns${num}`).append(temp_html)
+        }
+        function commentEdit(num){
+            console.log(num)
+            let newComment = $(`#currentComment${num}`).val()
+            console.log(newComment)
+            if ( newComment === ''){
+                alert('수정 내용을 작성해주세요.')
+            } 
+            else{
+                $.ajax({
+                type: 'PATCH',
+                url: `/posts/<%= post[0]['count'] %>/comment`,
+                data: {
+                newComment, commentCount: num
+                },
+                success: function (response) {
+                    if (response['success']){
+                        alert(response['msg'])
+                        window.location.href = `/posts/<%= post[0]['count'] %>`
+                    }
+                    else{
+                        alert(response['errormsg'])
+                    }
+                }
+            });
+            }
+        }
+
+        function goback(){
+            window.location.href = '/posts'
+        }
+
+        function commentDelete(num){
+            console.log(num)
+            let id = `commentList(${num})`
+            console.log(id)
+            if(confirm('정말 삭제하시겠습니까?')){
+                $.ajax({
+                type: 'DELETE',
+                url: `/posts/<%= post[0]['count'] %>/comment`,
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                data: {
+                    commentCount: num
+                },
+                success: function (response) {
+                    alert(response.msg)
+                    window.location.href = `/posts/<%= post[0]['count'] %>`
+                }
+            });
+            }else{
+                return
+            }
+        }
         </script>
 </head>
 <body>
@@ -293,12 +363,15 @@ main {
                                 <% let nickname = comments[i]['nickname'] %>
                                 <% let comment = comments[i]['comment']%>
                                 <% let userId_DB = comments[i]['userId_DB'] %>
-                                <tr class = 'click'> <!-- 게시물 클릭 시, 상세 게시물 페이지로 전환 -->
+                                <% let commentCount = comments[i]['commentCount']%>
+                                <tr class = '<%= commentCount%>' id = 'commentList<%=commentCount%>'> <!-- 게시물 클릭 시, 상세 게시물 페이지로 전환 -->
                                 <td><%= nickname %></td>
-                                <td><%= comment %></td>
+                                <td id = 'currentComment<%=commentCount%>'><%= comment %></td>
                                 <td  style= "display: none;"  id ="commentEditbtns<%= i%>" class = "<%=userId_DB%>">
-                                    <button class = "'commentEdit'">수정</button>
-                                    <button class = "'commentEdit'">삭제</button>
+                                    <div id = 'commentBtns<%=commentCount%>'>
+                                    <button id = 'commentEditBtn<%=commentCount%>' onclick = 'editShow(<%=commentCount%>)'>수정</button>
+                                    <button id = 'commentDeleteBtn<%=commentCount%>' onclick = 'commentDelete(<%=commentCount%>)'>삭제</button>
+                                    </div>
                                 </td>
                                 </tr>
                                 <% } %>

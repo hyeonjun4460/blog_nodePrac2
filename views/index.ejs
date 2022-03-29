@@ -149,12 +149,14 @@ main {
                     $('#loginbtn').hide()
                     $('#postbtn').show()
                     let currentUserId_DB = response.user._id
-                    let fixbtnclass = $('#fixbtn').attr('class').split('`')[1]
-                    console.log(currentUserId_DB, fixbtnclass)
-                    if (fixbtnclass === currentUserId_DB){
-                        $('#fixbtn').show()
+                    for ( let i =0; i < document.getElementsByTagName('tr').length-1; i++){
+                        let fixbtnId = $(`#fixbtn${i}`).attr('class').split('`')[1]
+                        console.log(fixbtnId, currentUserId_DB)
+
+                        if (currentUserId_DB === fixbtnId){
+                        $(`#fixbtn${i}`).show()
                     }
-                    },
+                    }},
                 error: function (xhr, status, error) {
                     if (status == 401) {
                         alert("로그인이 필요합니다.");
@@ -215,7 +217,7 @@ main {
                                 <td onclick="window.location.href = `/posts/<%= count%>`"><%= date %></td>
                                 <td onclick="window.location.href = `/posts/<%= count%>`"><%= nickname %></td>
                                 <td onclick="window.location.href = `/posts/<%= count%>`"><%= title %></td>
-                                <td id = "fixbtn" style = "display: none"  class = `<%= userId_DB %>` onclick="window.location.href = `/posts/<%= count%>/edit`">수정하기</td>
+                                <td id = "fixbtn<%=count%>" style = "display: none"  class = `<%= userId_DB %>` onclick="window.location.href = `/posts/<%= count%>/edit`">수정하기</td>
                                 </tr>
                                 <% } %>
                         </tbody>

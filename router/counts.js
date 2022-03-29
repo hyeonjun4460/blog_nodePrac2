@@ -10,7 +10,8 @@ const authMiddleware = require('../middlewares/auth-middleware')
 // DB
 const User = require('../schemas/user')
 const Posts = require('../schemas/post')
-const commentDB = require('../schemas/comment')
+const commentDB = require('../schemas/comment');
+const comment = require('../schemas/comment');
 // 라우터 
 const app = express()
 const router = express.Router()
@@ -94,7 +95,6 @@ router.post('/:count/comment', async (req, res) => {
     }
     // 포스트 ID 가져오기
     const postId_DB = await Posts.findOne({ count: Number(count) }).then((value) => { return value._id.toHexString() })
-
     // commetDB에 저장하기
     await commentDB.create({
         nickname,
@@ -104,6 +104,40 @@ router.post('/:count/comment', async (req, res) => {
         commentCount
     })
     res.json({ success: true, msg: '등록 완료!' })
+})
+
+// 상세 게시글 patch API
+router.patch('/:count/comment', async (req, res) => {
+    const { count } = req.params
+    const postId_DB = await Posts.findOne({ count: Number(count) })
+    console.log(postId_DB)
+    const { newComment, commentCount } = req.body
+    console.log(newComment, commentCount)
+    const existcomment = await commentDB.findOne({ commentCount })
+    console.log(existcomment)
+    if (existcomment) {
+        await commentDB.updateOne({ commentCount }, { $set: { comment: newComment } })
+        res.json({ success: true, msg: '수정 완료되었습니다.' })
+    } else {
+        res.status(400).send({ errormsg: '잘못된 요청입니다.' })
+    }
+
+})
+// 상세 게시글 Delete API
+router.delete('/:count/comment', async (req, res) => {
+    const { count } = req.params
+    const { commentCount } = req.body
+    console.log(commentCount)
+    // comment db에서 commentCount를 가진 document 찾기
+    const existcomment = await commentDB.findOne({ commentCount })
+    console.log(existcomment)
+    if (existcomment) {
+        await commentDB.deleteOne({ commentCount })
+        res.json({ success: true, msg: '삭제했습니다.' })
+    }
+    else {
+        res.json({ suceess: false, msg: '게시글을 다시 확인해주세요.' })
+    }
 })
 
 module.exports = router
