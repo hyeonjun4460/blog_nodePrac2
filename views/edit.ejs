@@ -179,12 +179,11 @@ main {
 // 게시글 수정 버튼
         function edit(){
             let content = $('#content').val()
-            let password = $('#password').val()
             $.ajax({
                 type: 'PUT',
                 url: `/posts/<%= post[0]['count'] %>/edit`,
                 data: {
-                content, password
+                content
                 },
                 success: function (response) {
                     if (response['success']){
@@ -201,12 +200,11 @@ main {
         // 게시글 삭제 버튼
         function shutdown(){
             let content = $('#content').val()
-            let password = $('#password').val()
             $.ajax({
                 type: 'DELETE',
                 url: `/posts/<%= post[0]['count'] %>/edit`,
                 data: {
-                content, password
+                content
                 },
                 success: function (response) {
                     if (response['success']){
@@ -249,7 +247,6 @@ main {
                         <p id = 'content'>내용: <%= post[0]['content'] %></p>
                         <button id = 'contentEditBtn' onclick = 'contentEdit()'>내용 변경</button>
                     </div>
-                    <input id = 'password' type="password" placeholder="PW를 입력해주세요.">
                     <div class="btn">
                         <button onclick="window.location.href = '/posts'">뒤로가기</button>
                         <button class = 'delete' onclick="shutdown()">삭제하기</button>

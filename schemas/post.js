@@ -3,27 +3,25 @@
 const mongoose = require('mongoose')
 // 게시글 스키마 생성
 const postschema = mongoose.Schema({
-
-    nickname: {
-        type: String,
-        required: true
-    },
     userId_DB: {
         type: String,
         required: true
     },
-    title: {
-        type: String
+    nickname: {
+        type: String,
+        required: true
     },
-    password: {
+    title: {
         type: String,
         required: true
     },
     content: {
-        type: String
+        type: String,
+        required: true
     },
     date: {
-        type: String
+        type: String,
+        required: true
     },
     count: {
         type: Number,
