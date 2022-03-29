@@ -28,8 +28,7 @@ const postschema = mongoose.Schema({
     count: {
         type: Number,
         required: true,
-        unique: true
     }
 })
 // 게시글  스키마를 모델로서 묘듈 생성
-module.exports = mongoose.model('posts', postschema)
+module.exports = mongoose.model('postDB', postschema)

@@ -1,24 +1,28 @@
 // EXPRESS 등 모듈
 const express = require('express')
-const Posts = require('../schemas/post')
 const joi = require('joi')
 const jwt = require('jsonwebtoken')
-const User = require('../schemas/user')
 const joimiddleware = require('../middlewares/joi')
 const saltRounds = 10;
 const bcrypt = require('bcrypt')
 const authMiddleware = require('../middlewares/auth-middleware')
 
+// DB
+const User = require('../schemas/user')
+const Posts = require('../schemas/post')
+const commentDB = require('../schemas/comment')
 // 라우터 
 const app = express()
 const router = express.Router()
 
-// 상세 게시글 조회 API
+// 상세 게시글 + 댓글 조회 API
 router.get('/:count', async (req, res) => {
     const Count = req.params.count
     const post = await Posts.find({ count: Number(Count) }, { _id: false, pw: false })
-    // res.json({ success: true, post: post })
-    res.render('../views/detail', { post })
+    // 댓글 정보 가져오기
+    const postId_DB = await Posts.findOne({ count: Number(Count) }).then((value) => { return value._id.toHexString() })
+    const comments = await commentDB.find({ postId_DB }, { _id: false }).sort("-commentCount")
+    res.render('../views/detail', { post, comments })
 })
 // 수정 페이지 이동
 router.get('/:count/edit', async (req, res) => {
@@ -69,17 +73,37 @@ router.delete('/:count/edit', async (req, res) => {
         }
     }
 })
+
 // 상세 게시글 - 댓글 POST API
 router.post('/:count/comment', async (req, res) => {
+    const { count } = req.params
+    const { tokenid, comment } = req.body
+    const { userId } = jwt.verify(tokenid, 'my-secret-key')
+    // userId, comment 가져오기
+    const userId_DB = await User.findOne({ _id: userId }).then((value) => { return value._id.toHexString() })
+    // userDB에서 닉네임 가져오기
+    const nickname = await User.findOne({ _id: userId }).then((value) => { return value.nickname })
+    // 댓글 번호 만들기
+    let commentCount = 0
+    const commentdb = await commentDB.find({})
+    if (commentdb.length === 0) {
+        commentCount = 0
+    }
+    else {
+        commentCount = commentdb[commentdb.length - 1].commentCount + 1
+    }
+    // 포스트 ID 가져오기
+    const postId_DB = await Posts.findOne({ count: Number(count) }).then((value) => { return value._id.toHexString() })
 
-    // 클라이언트에서 보내는 값 받아오기
-    // 게시물 번호 가져오기
-    // db 스키마 짜기
-
+    // commetDB에 저장하기
+    await commentDB.create({
+        nickname,
+        userId_DB,
+        comment,
+        postId_DB,
+        commentCount
+    })
+    res.json({ success: true, msg: '등록 완료!' })
 })
-//router.post()
-// 댓글 POST API with DB 스키마 제작(nickname, comment, userID_DB, contentID_DB)
-// 댓글 GET API to 상세페이지
-// 댓글 patch API
-// 댓글 delete API
+
 module.exports = router

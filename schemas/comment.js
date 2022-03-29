@@ -1,17 +1,34 @@
 const mongoose = require("mongoose");
 
-const UserSchema = new mongoose.Schema({
-    id: String,
-    nickname: String,
-    password: String,
+const commentSchema = new mongoose.Schema({
+    nickname: {
+        type: String,
+        required: true
+    },
+    userId_DB: {
+        type: String,
+        required: true
+    },
+    postId_DB: {
+        type: String,
+        required: true
+    },
+    comment: {
+        type: String,
+        required: true
+    },
+    commentCount: {
+        type: Number,
+        required: true,
+    }
 });
-UserSchema.virtual("userId").get(function () {
+commentSchema.virtual("userId").get(function () {
     return this._id.toHexString();
 });
 
 
 // virtual 을 json에포함해서 전송
-UserSchema.set("toJSON", {
+commentSchema.set("toJSON", {
     virtuals: true,
 });
-module.exports = mongoose.model("User", UserSchema);
+module.exports = mongoose.model("commentDB", commentSchema);
