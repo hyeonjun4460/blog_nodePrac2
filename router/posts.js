@@ -45,7 +45,7 @@ router.post('/auth', async (req, res) => {
     // 일치하지 않으면, status 400, errormsg 보내기
     if (!passwordcheck) {
         res.status(400).send({
-            errormsg: "이메일 또는 패스워드가 잘못됐습니다.",
+            errormsg: "아이디 또는 패스워드를 확인해주세요.",
         });
         return;
     }
@@ -75,14 +75,22 @@ router.get('/register', (req, res) => {
 // 회원가입 API
 router.post('/register', joimiddleware, async (req, res) => {
     const { id, nickname, password, confirmPassword } = req.body;
+    console.log(password.search(nickname))
+
 
     const existUsers = await User.find({
         $or: [{ id }, { nickname }],
     });
+    if (password.search(nickname) != -1) {
+        res.status(400).send({
+            errormsg: "다른 비밀번호를 입력해주세요"
+        })
+        return
+    }
     // 아이디와 닉네임이 중복되지 않게 하기.
     if (existUsers.length) {
         res.status(400).send({
-            errorMessage: "이미 가입된 ID 또는 닉네임이 있습니다.",
+            errormsg: "이미 가입된 ID 또는 닉네임이 있습니다.",
         });
         return;
     }

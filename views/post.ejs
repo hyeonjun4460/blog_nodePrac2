@@ -122,16 +122,14 @@ main {
     </style>
 
     <script>
-        $(document).ready(function(user){
-            if (localStorage.length !== 0){
-                getSelf()
-            }
+        $(document).ready(function(){
+            getSelf()
         })
 
         
 
         //  사용자 인증 요청
-        function getSelf(user) {
+        function getSelf() {
             $.ajax({
                 type: "GET",
                 url: "/posts/users/me",
@@ -139,6 +137,7 @@ main {
                     authorization: `Bearer ${localStorage.getItem("token")}`,
                         },
                 success: function (response) {
+                    console.log(response)
                     },
                 error: function (xhr, status, error) {
                     if (status == 401) {

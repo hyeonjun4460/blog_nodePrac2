@@ -10,7 +10,7 @@ module.exports = (req, res, next) => {
     const joischema = joi.object({
         id: joi.string().alphanum().min(3).max(30).required(),
         nickname: joi.string().alphanum().min(3).max(30).required(),
-        password: joi.string().alphanum().min(6).max(20).required(),
+        password: joi.string().alphanum().min(4).max(20).required(),
         confirmPassword: joi.ref('password')
     })
 
