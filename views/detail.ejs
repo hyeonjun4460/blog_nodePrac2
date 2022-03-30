@@ -250,9 +250,8 @@ main {
         // 수정 내용 '' 값은 validation 하기
         function editShow(num){
             console.log(num)
-            $(`#currentComment${num}`).replaceWith(function(){
-                return $('<input>', {type: 'text', id: `currentComment${num}`,style: "width: 90%; padding-top: 5px; padding-bottom: 0;"})
-            })
+            $(`#currentComment${num}`).hide()
+            $(`#newComment${num}`).show()
             $(`#commentEditBtn${num}`).hide()
             $(`#commentDeleteBtn${num}`).hide()
             let temp_html = `<button onclick = commentEdit(${num})>저장</button>
@@ -262,7 +261,7 @@ main {
         }
         function commentEdit(num){
             console.log(num)
-            let newComment = $(`#currentComment${num}`).val()
+            let newComment = $(`#new${num}`).val()
             console.log(newComment)
             if ( newComment === ''){
                 alert('수정 내용을 작성해주세요.')
@@ -364,6 +363,7 @@ main {
                                 <tr class = '<%= commentCount%>' id = 'commentList<%=commentCount%>'> <!-- 게시물 클릭 시, 상세 게시물 페이지로 전환 -->
                                 <td><%= nickname %></td>
                                 <td id = 'currentComment<%=commentCount%>'><%= comment %></td>
+                                <td style = 'display: none; width: 80%;' id = 'newComment<%=commentCount%>'><input id = 'new<%=commentCount%>'style = 'width: 100%' type="text" value = '<%=comment%>'></td>
                                 <td  style= "display: none;"  id ="commentEditbtns<%= i%>" class = "<%=userId_DB%>">
                                     <div id = 'commentBtns<%=commentCount%>'>
                                     <button id = 'commentEditBtn<%=commentCount%>' onclick = 'editShow(<%=commentCount%>)'>수정</button>

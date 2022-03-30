@@ -157,8 +157,10 @@ main {
             let content = $('#comment').val()
             if(title === ''){
                 alert('제목을 입력하세요')
-            }else if(comment === ''){
+                return
+            }else if(content === ''){
                 alert('내용을 입력하세요')
+                return
             }
             else{
             $.ajax({
