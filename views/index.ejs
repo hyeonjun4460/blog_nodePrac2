@@ -150,7 +150,7 @@ main {
                     $('#postbtn').show()
                     let currentUserId_DB = response.user._id
                     for ( let i =0; i < document.getElementsByTagName('tr').length; i++){
-                        let fixbtnId = $(`#fixbtn${i}`).attr('class').split('`')[1]
+                        let fixbtnId = $(`#fixbtn${i}`).attr('class')
                         if (currentUserId_DB === fixbtnId){
                         $(`#fixbtn${i}`).show()
                     }
@@ -215,7 +215,7 @@ main {
                                 <td onclick="window.location.href = `/posts/<%= count%>`"><%= date %></td>
                                 <td onclick="window.location.href = `/posts/<%= count%>`"><%= nickname %></td>
                                 <td onclick="window.location.href = `/posts/<%= count%>`"><%= title %></td>
-                                <td id = "fixbtn<%=count%>" style = "display: none"  class = `<%= userId_DB %>` onclick="window.location.href = `/posts/<%= count%>/edit`">수정하기</td>
+                                <td id = "fixbtn<%=count%>" style = "display: none"  class = "<%= userId_DB %>" onclick="window.location.href = `/posts/<%= count%>/edit`">수정하기</td>
                                 </tr>
                                 <% } %>
                         </tbody>
