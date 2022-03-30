@@ -262,6 +262,7 @@ main {
         function commentEdit(num){
             console.log(num)
             let newComment = $(`#new${num}`).val()
+            let tokenid = localStorage.token
             console.log(newComment)
             if ( newComment === ''){
                 alert('수정 내용을 작성해주세요.')
@@ -271,7 +272,7 @@ main {
                 type: 'PATCH',
                 url: `/posts/<%= post[0]['count'] %>/comment`,
                 data: {
-                newComment, commentCount: num
+                tokenid, newComment, commentCount: num
                 },
                 success: function (response) {
                     if (response['success']){
@@ -293,6 +294,7 @@ main {
         function commentDelete(num){
             console.log(num)
             let id = `commentList(${num})`
+            let tokenid = localStorage.token
 
             if(confirm('정말 삭제하시겠습니까?')){
                 $.ajax({
@@ -302,7 +304,7 @@ main {
                     authorization: `Bearer ${localStorage.getItem("token")}`,
                         },
                 data: {
-                    commentCount: num
+                    tokenid, commentCount: num
                 },
                 success: function (response) {
                     alert(response.msg)

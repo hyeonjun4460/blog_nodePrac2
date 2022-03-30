@@ -133,6 +133,5 @@ router.post('/upload', async (req, res) => {
 
 })
 
-// 상세 게시글 - 댓글 POST API
 
 module.exports = router

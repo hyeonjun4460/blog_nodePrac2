@@ -179,6 +179,7 @@ main {
 // 게시글 수정 버튼
         function edit(){
             let content = $('#content').val()
+            let tokenid = localStorage.token
             if (content === ''){
                 alert('수정 내용을 작성해주세요.')
                 return
@@ -187,7 +188,7 @@ main {
                 type: 'PUT',
                 url: `/posts/<%= post[0]['count'] %>/edit`,
                 data: {
-                content
+                tokenid, content
                 },
                 success: function (response) {
                     if (response['success']){
@@ -204,11 +205,12 @@ main {
         // 게시글 삭제 버튼
         function shutdown(){
             let content = $('#content').val()
+            let tokenid = localStorage.token
             $.ajax({
                 type: 'DELETE',
                 url: `/posts/<%= post[0]['count'] %>/edit`,
                 data: {
-                content
+                content, tokenid
                 },
                 success: function (response) {
                     if (response['success']){

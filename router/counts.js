@@ -36,8 +36,9 @@ router.get('/:count/edit', async (req, res) => {
 router.put('/:count/edit', async (req, res) => {
     const Count = req.params.count
     // request된 비밀번호, 수정 내용 가져오기
-    const { content } = req.body
-    const existpost = await Posts.find({ count: Number(Count) }, { _id: false })
+    const { content, tokenid } = req.body
+    const { userId } = jwt.verify(tokenid, 'my-secret-key')
+    const existpost = await Posts.find({ count: Number(Count), userId_DB: userId }, { _id: false })
     // existpost의 암호화된 비밀번호와 request받은 비밀번호 비교하기.
     // 게시글이 존재하고, 비밀번호가 동일하면 삭제
     if (existpost.length) {
@@ -46,16 +47,18 @@ router.put('/:count/edit', async (req, res) => {
 
     }
     else {
-        res.json({ success: false, errormsg: '비밀번호가 틀립니다.' })
+        res.json({ success: false, errormsg: '수정 권한이 없습니다.' })
     }
 })
 
 //  상세 게시글 삭제
 router.delete('/:count/edit', async (req, res) => {
     const Count = req.params.count
+    const { tokenid } = req.body
+    const { userId } = jwt.verify(tokenid, 'my-secret-key')
     // 비밀번호 가져오기
     // 포스트 DB에서 상세 게시글 데이터 가져오기
-    const existpost = await Posts.find({ count: Number(Count) }, { _id: false })
+    const existpost = await Posts.find({ count: Number(Count), userId_DB: userId }, { _id: false })
     // 포스트 DB에서 비밀번호 복호화해서 입력값 비밀번호와 비교하기
     // 게시글이 존재하고, 비밀번호가 동일하면 삭제
     if (existpost.length) {
@@ -63,7 +66,7 @@ router.delete('/:count/edit', async (req, res) => {
         res.json({ success: true, msg: '삭제했습니다.' })
     }
     else {
-        res.json({ success: false, errormsg: '비밀번호가 틀립니다.' })
+        res.json({ success: false, errormsg: '삭제 권한이 없습니다.' })
     }
 })
 
@@ -98,12 +101,13 @@ router.post('/:count/comment', async (req, res) => {
     res.json({ success: true, msg: '등록 완료!' })
 })
 
-// 상세 게시글 patch API
+// 상세 게시글 댓글 patch API
 router.patch('/:count/comment', async (req, res) => {
     const { count } = req.params
     const postId_DB = await Posts.findOne({ count: Number(count) })
-    const { newComment, commentCount } = req.body
-    const existcomment = await commentDB.findOne({ commentCount })
+    const { tokenid, newComment, commentCount } = req.body
+    const { userId } = jwt.verify(tokenid, 'my-secret-key')
+    const existcomment = await commentDB.findOne({ commentCount, userId_DB: userId })
     if (existcomment) {
         await commentDB.updateOne({ commentCount }, { $set: { comment: newComment } })
         res.json({ success: true, msg: '수정 완료되었습니다.' })
@@ -111,12 +115,13 @@ router.patch('/:count/comment', async (req, res) => {
         res.status(400).send({ errormsg: '잘못된 요청입니다.' })
     }
 })
-// 상세 게시글 Delete API
+// 상세 게시글 댓글 Delete API
 router.delete('/:count/comment', async (req, res) => {
     const { count } = req.params
-    const { commentCount } = req.body
+    const { tokenid, commentCount } = req.body
+    const { userId } = jwt.verify(tokenid, 'my-secret-key')
     // comment db에서 commentCount를 가진 document 찾기
-    const existcomment = await commentDB.findOne({ commentCount })
+    const existcomment = await commentDB.findOne({ commentCount, userId_DB: userId })
     if (existcomment) {
         await commentDB.deleteOne({ commentCount })
         res.json({ success: true, msg: '삭제했습니다.' })
