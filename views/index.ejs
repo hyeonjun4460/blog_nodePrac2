@@ -149,7 +149,7 @@ main {
                     $('#loginbtn').hide()
                     $('#postbtn').show()
                     let currentUserId_DB = response.user._id
-                    for ( let i =0; i < document.getElementsByTagName('tr').length-1; i++){
+                    for ( let i =0; i < document.getElementsByTagName('tr').length; i++){
                         let fixbtnId = $(`#fixbtn${i}`).attr('class').split('`')[1]
                         if (currentUserId_DB === fixbtnId){
                         $(`#fixbtn${i}`).show()

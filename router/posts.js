@@ -74,8 +74,6 @@ router.get('/register', (req, res) => {
 // 회원가입 API
 router.post('/register', joimiddleware, async (req, res) => {
     const { nickname, password, confirmPassword } = req.body;
-
-
     const existUsers = await User.find({
         nickname
     });

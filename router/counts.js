@@ -110,7 +110,6 @@ router.patch('/:count/comment', async (req, res) => {
     } else {
         res.status(400).send({ errormsg: '잘못된 요청입니다.' })
     }
-
 })
 // 상세 게시글 Delete API
 router.delete('/:count/comment', async (req, res) => {
