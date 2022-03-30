@@ -102,11 +102,8 @@ router.post('/:count/comment', async (req, res) => {
 router.patch('/:count/comment', async (req, res) => {
     const { count } = req.params
     const postId_DB = await Posts.findOne({ count: Number(count) })
-    console.log(postId_DB)
     const { newComment, commentCount } = req.body
-    console.log(newComment, commentCount)
     const existcomment = await commentDB.findOne({ commentCount })
-    console.log(existcomment)
     if (existcomment) {
         await commentDB.updateOne({ commentCount }, { $set: { comment: newComment } })
         res.json({ success: true, msg: '수정 완료되었습니다.' })
@@ -119,10 +116,8 @@ router.patch('/:count/comment', async (req, res) => {
 router.delete('/:count/comment', async (req, res) => {
     const { count } = req.params
     const { commentCount } = req.body
-    console.log(commentCount)
     // comment db에서 commentCount를 가진 document 찾기
     const existcomment = await commentDB.findOne({ commentCount })
-    console.log(existcomment)
     if (existcomment) {
         await commentDB.deleteOne({ commentCount })
         res.json({ success: true, msg: '삭제했습니다.' })

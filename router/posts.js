@@ -41,7 +41,6 @@ router.post('/auth', async (req, res) => {
     const userpassword = await User.findOne({ nickname }).then((value) => { return value.password })
     // 복호화된 비밀번호와 입력된 비밀번호 일치하는지 확인하기
     const passwordcheck = await bcrypt.compare(password, userpassword).then((value) => { return value }).catch((error) => { res.status(400).send({ errmsg: '다시 시도해주세요.' }) })
-    console.log(password, passwordcheck)
     // 일치하지 않으면, status 400, errormsg 보내기
     if (!passwordcheck) {
         res.status(400).send({
@@ -75,7 +74,6 @@ router.get('/register', (req, res) => {
 // 회원가입 API
 router.post('/register', joimiddleware, async (req, res) => {
     const { nickname, password, confirmPassword } = req.body;
-    console.log(password.search(nickname))
 
 
     const existUsers = await User.find({
@@ -125,7 +123,6 @@ router.post('/upload', async (req, res) => {
     else {
         count = posts[posts.length - 1].count + 1
     }
-    console.log(count, posts.length)
     await Posts.create({
         userId_DB,
         nickname,
