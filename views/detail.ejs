@@ -181,7 +181,6 @@ main {
             if (localStorage.length !== 0){
                 getSelf()
             }
-  
         })
         function getSelf() {
             $.ajax({
@@ -198,8 +197,6 @@ main {
                         $(`#commentEditbtns${i}`).show()
                     }
                     // 토큰 ID가 userID와 같으면 수정/삭제 버튼 보이기
-                
-                    
                         }
                     ,
                 error: function (xhr, status, error) {

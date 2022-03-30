@@ -151,8 +151,6 @@ main {
                     let currentUserId_DB = response.user._id
                     for ( let i =0; i < document.getElementsByTagName('tr').length-1; i++){
                         let fixbtnId = $(`#fixbtn${i}`).attr('class').split('`')[1]
-                        console.log(fixbtnId, currentUserId_DB)
-
                         if (currentUserId_DB === fixbtnId){
                         $(`#fixbtn${i}`).show()
                     }
