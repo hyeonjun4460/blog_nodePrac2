@@ -131,13 +131,13 @@ main {
         })
 // /posts/auth로 id, pw 입력값 post
     function auth(){
-            let id = $('#id').val()
+            let nickname = $('#nickname').val()
             let password = $('#password').val()
             $.ajax({
                 type: 'POST',
                 url: '/posts/auth',
                 data: {
-                id, password
+                nickname, password
                 },
                 success: function (response) {
                     localStorage.setItem("token", response.token);
@@ -167,7 +167,7 @@ main {
             <div class="review">
                 <div class="showtable">
                     <p> Welcome! 환영합니다. 당신의 이야기를 들려주세요</p>
-                    <input id = 'id' type="text" placeholder="아이디">
+                    <input id = 'nickname' type="text" placeholder="닉네임">
                     <input id = 'password' class = 'password'type="password" placeholder="비밀번호">
                     <div class="btn">
                         <button onclick="window.location.href = '/posts/register'">회원가입</button>

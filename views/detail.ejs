@@ -181,7 +181,6 @@ main {
             if (localStorage.length !== 0){
                 getSelf()
             }
-  
         })
         function getSelf() {
             $.ajax({
@@ -198,8 +197,6 @@ main {
                         $(`#commentEditbtns${i}`).show()
                     }
                     // 토큰 ID가 userID와 같으면 수정/삭제 버튼 보이기
-                
-                    
                         }
                     ,
                 error: function (xhr, status, error) {
@@ -297,7 +294,7 @@ main {
         function commentDelete(num){
             console.log(num)
             let id = `commentList(${num})`
-            console.log(id)
+
             if(confirm('정말 삭제하시겠습니까?')){
                 $.ajax({
                 type: 'DELETE',
@@ -336,7 +333,7 @@ main {
         <div class="wrap">
             <div class="review">
                 <div class="showtable">
-                    <p id = 'nickname'> ID: <%= post[0]['nickname'] %></p>
+                    <p id = 'nickname'> 닉네임: <%= post[0]['nickname'] %></p>
                     <p id = 'title'>제목: <%= post[0]['title']%></p>
                     <p id = 'content'class = 'last'>내용: <%= post[0]['content']%></p>
                     <div class="btn">

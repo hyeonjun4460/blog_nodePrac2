@@ -36,17 +36,14 @@ router.get('/:count/edit', async (req, res) => {
 router.put('/:count/edit', async (req, res) => {
     const Count = req.params.count
     // request된 비밀번호, 수정 내용 가져오기
-    const { content, password } = req.body
+    const { content } = req.body
     const existpost = await Posts.find({ count: Number(Count) }, { _id: false })
     // existpost의 암호화된 비밀번호와 request받은 비밀번호 비교하기.
-    const postpassword = existpost[0].password
-    const passwordcheck = await bcrypt.compare(password, postpassword).then((value) => { return value }).catch((error) => { res.status(400).send({ errmsg: '다시 시도해주세요.' }) })
     // 게시글이 존재하고, 비밀번호가 동일하면 삭제
     if (existpost.length) {
-        if (passwordcheck) {
-            await Posts.updateOne({ count: Number(Count) }, { $set: { content } })
-            res.json({ success: true, msg: '수정 완료했습니다.' })
-        }
+        await Posts.updateOne({ count: Number(Count) }, { $set: { content } })
+        res.json({ success: true, msg: '수정 완료했습니다.' })
+
     }
     else {
         res.json({ success: false, errormsg: '비밀번호가 틀립니다.' })
@@ -57,21 +54,16 @@ router.put('/:count/edit', async (req, res) => {
 router.delete('/:count/edit', async (req, res) => {
     const Count = req.params.count
     // 비밀번호 가져오기
-    const { password } = req.body
     // 포스트 DB에서 상세 게시글 데이터 가져오기
     const existpost = await Posts.find({ count: Number(Count) }, { _id: false })
     // 포스트 DB에서 비밀번호 복호화해서 입력값 비밀번호와 비교하기
-    const postpassword = existpost[0].password
-    const passwordcheck = await bcrypt.compare(password, postpassword).then((value) => { return value }).catch((error) => { res.status(400).send({ errmsg: '다시 시도해주세요.' }) })
     // 게시글이 존재하고, 비밀번호가 동일하면 삭제
     if (existpost.length) {
-        if (passwordcheck) {
-            await Posts.deleteOne({ count: Number(Count) })
-            res.json({ success: true, msg: '삭제했습니다.' })
-        }
-        else {
-            res.json({ success: false, errormsg: '비밀번호가 틀립니다.' })
-        }
+        await Posts.deleteOne({ count: Number(Count) })
+        res.json({ success: true, msg: '삭제했습니다.' })
+    }
+    else {
+        res.json({ success: false, errormsg: '비밀번호가 틀립니다.' })
     }
 })
 

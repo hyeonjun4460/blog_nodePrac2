@@ -36,9 +36,9 @@ router.get('/auth', (req, res) => {
 
 // 로그인 API
 router.post('/auth', async (req, res) => {
-    const { id, password } = req.body;
+    const { nickname, password } = req.body;
     // DB에 입력된 비밀번호 복호화 하기
-    const userpassword = await User.findOne({ id }).then((value) => { return value.password })
+    const userpassword = await User.findOne({ nickname }).then((value) => { return value.password })
     // 복호화된 비밀번호와 입력된 비밀번호 일치하는지 확인하기
     const passwordcheck = await bcrypt.compare(password, userpassword).then((value) => { return value }).catch((error) => { res.status(400).send({ errmsg: '다시 시도해주세요.' }) })
     console.log(password, passwordcheck)
@@ -50,7 +50,7 @@ router.post('/auth', async (req, res) => {
         return;
     }
     //  일치하다면, email을 가진 유저 찾기
-    const user = await User.findOne({ id })
+    const user = await User.findOne({ nickname })
     const token = jwt.sign({ userId: user.userId }, "my-secret-key");
     res.send({
         success: true,
@@ -74,12 +74,12 @@ router.get('/register', (req, res) => {
 
 // 회원가입 API
 router.post('/register', joimiddleware, async (req, res) => {
-    const { id, nickname, password, confirmPassword } = req.body;
+    const { nickname, password, confirmPassword } = req.body;
     console.log(password.search(nickname))
 
 
     const existUsers = await User.find({
-        $or: [{ id }, { nickname }],
+        nickname
     });
     if (password.search(nickname) != -1) {
         res.status(400).send({
@@ -97,7 +97,7 @@ router.post('/register', joimiddleware, async (req, res) => {
     // 비밀번호 암호화
     const pw_hash = await bcrypt.hash(password, saltRounds).then((value) => { return value })
 
-    const user = new User({ id, nickname, password: pw_hash });
+    const user = new User({ nickname, password: pw_hash });
     await user.save();
     res.status(201).send({ success: true, msg: '회원가입에 성공했습니다.' });
 })
@@ -110,13 +110,13 @@ router.get('/upload', (req, res) => {
 // 게시글 POST API
 // userDB의DB ID로 작성자 = 로그인한 유저 여부를 인증.
 router.post('/upload', async (req, res) => {
-    const { tokenid, nickname, title, password, content } = req.body
+    const { tokenid, title, content } = req.body
     // 토큰을 가진 사용자의 DB ID 가져오기
     const { userId } = jwt.verify(tokenid, 'my-secret-key')
     const userId_DB = await User.findOne({ _id: userId }).then((value) => { return value._id.toHexString() })
+    const nickname = await User.findOne({ _id: userId }).then((value) => { return value.nickname })
     const date = new Date()
     // 비밀번호 암호화하기.
-    const pw_hash = await bcrypt.hash(password, saltRounds).then((value) => { return value })
     let count = 0
     posts = await Posts.find({})
     if (posts.length === 0) {
@@ -130,7 +130,6 @@ router.post('/upload', async (req, res) => {
         userId_DB,
         nickname,
         title,
-        password: pw_hash,
         content,
         date,
         count // 각 게시글에 고유값 지정 위해서...
@@ -141,9 +140,4 @@ router.post('/upload', async (req, res) => {
 
 // 상세 게시글 - 댓글 POST API
 
-//router.post()
-// 댓글 POST API with DB 스키마 제작(nickname, comment, userID_DB, contentID_DB)
-// 댓글 GET API to 상세페이지
-// 댓글 patch API
-// 댓글 delete API
 module.exports = router

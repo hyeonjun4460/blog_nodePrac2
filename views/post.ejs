@@ -153,22 +153,12 @@ main {
 
         function post(){
             const tokenid = localStorage.token
-            let nickname = $('#nickname').val()
             let title = $('#title').val()
             let content = $('#comment').val()
-            let password = $('#password').val()
-            if (nickname === ''){
-                alert('아이디를 입력하세요.')
-            }else if(title === ''){
+            if(title === ''){
                 alert('제목을 입력하세요')
             }else if(comment === ''){
                 alert('내용을 입력하세요')
-            }
-            else if ( password === ''){
-                alert('비밀번호를 입력하세요')
-            }
-            else if (isNaN(password)){
-                alert('비밀번호는 숫자로 입력해주세요')
             }
             else{
             $.ajax({
@@ -178,7 +168,7 @@ main {
                     authorization: `Bearer ${localStorage.getItem("token")}`,
                         },
                 data: {
-                    tokenid, nickname, title, content, password 
+                    tokenid, title, content 
                 },
                 success: function (response) {
                     window.location.href = '/posts'
@@ -203,10 +193,8 @@ main {
         <div class="wrap">
             <div class="review">
                 <div class="showtable">
-                    <input id = 'nickname' type="text" placeholder="닉네임">
                     <input id = 'title' type="text" placeholder="제목">
                     <input id = 'comment'class = 'last' type="text" placeholder="마음껏 작성해주세요.">
-                    <input id = 'password' class = 'password'type="password" placeholder="비밀번호">
                     <div class="btn">
                         <button onclick="window.location.href = '/posts'">뒤로가기</button>
                         <button onclick="post()">글쓰기</button>

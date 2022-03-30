@@ -124,7 +124,6 @@ main {
 
 // 회원가입에 필요한 입력값 전달
         function register(){
-            let id = $('#id').val()
             let nickname = $('#nickname').val()
             let password = $('#password').val()
             let confirmPassword = $('#confirmPassword').val()
@@ -132,7 +131,7 @@ main {
                 type: 'POST',
                 url: '/posts/register',
                 data: {
-                id, nickname, password, confirmPassword 
+                nickname, password, confirmPassword 
                 },
                 success: function (response) {
                     // 완료시, 로그인 화면으로 다시 이동
@@ -162,7 +161,6 @@ main {
         <div class="wrap">
             <div class="review">
                 <div class="showtable">
-                    <input id = 'id' type="text" placeholder="아이디">
                     <input id = 'nickname' type="text" placeholder="닉네임">
                     <input id = 'password' class = 'password'type="password" placeholder="비밀번호">
                     <input id = 'confirmPassword' class = 'password'type="password" placeholder="비밀번호 확인">
