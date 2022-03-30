@@ -192,7 +192,7 @@ main {
                 success: function (response) {
                     $('#commentEditbtns').show()
                     let currentUserId_DB = response.user._id
-                    for ( let i =0; i < document.getElementsByTagName('tr').length; i++){
+                    for ( let i =0; i <= document.getElementsByTagName('tr').length; i++){
                         if (currentUserId_DB === $(`#commentEditbtns${i}`).attr('class'))
                         $(`#commentEditbtns${i}`).show()
                     }
