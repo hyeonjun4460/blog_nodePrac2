@@ -224,9 +224,9 @@ main {
 
         function contentEdit(){
             $('#content').replaceWith(function(){
-                return $('<input>', {type: 'text', id: 'content', value: `내용: <%= post[0]['content'] %>`, style: "width: 100%; margin-bottom: 20px"})
+                return $('<input>', {type: 'text', id: 'content', value: `<%= post[0]['content'] %>`, style: "width: 100%; margin-bottom: 20px"})
             })
-            $('#contentEditBtn').hide( )
+            $('#contentEditBtn').hide()
         }
     </script>
 </head>
