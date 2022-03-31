@@ -7,12 +7,31 @@
   },
   "host": "localhost:3000",
   "basePath": "/",
+  "tags": [
+      {
+          "name": "main",
+          "description": "About main posts api."
+      },
+      {
+          "name": "auth",
+          "description": "About authorization"
+      },
+      {
+          "name": "detail",
+          "description": "About detail post api"
+      },
+      {
+          "name": "comment",
+          "description": "About comment api"
+      }
+  ],
   "schemes": [
     "http"
   ],
   "paths": {
     "/": {
       "get": {
+        "tags": [ "main"],
         "description": "",
         "parameters": [],
         "responses": {}
@@ -20,6 +39,7 @@
     },
     "/posts/": {
       "get": {
+        "tags": [ "main"],
         "description": "",
         "parameters": [],
         "responses": {}
@@ -27,11 +47,13 @@
     },
     "/posts/auth": {
       "get": {
+        "tags": ["auth"],
         "description": "",
         "parameters": [],
         "responses": {}
       },
       "post": {
+        "tags": ["auth"],
         "description": "",
         "parameters": [
           {
@@ -62,6 +84,7 @@
     },
     "/posts/users/me": {
       "get": {
+        "tags": ["auth"],
         "description": "",
         "parameters": [
           {
@@ -82,11 +105,13 @@
     },
     "/posts/register": {
       "get": {
+        "tags": ["auth"],
         "description": "",
         "parameters": [],
         "responses": {}
       },
       "post": {
+        "tags": ["auth"],
         "description": "",
         "parameters": [
           {
@@ -122,12 +147,14 @@
       }
     },
     "/posts/upload": {
+    "tags": ["main"],
       "get": {
         "description": "",
         "parameters": [],
         "responses": {}
       },
       "post": {
+        "tags": ["main"],
         "description": "",
         "parameters": [
           {
@@ -158,6 +185,7 @@
     },
     "/posts/{count}": {
       "get": {
+        "tags": ["detail"],
         "description": "",
         "parameters": [
           {
@@ -172,6 +200,7 @@
     },
     "/posts/{count}/edit": {
       "get": {
+        "tags": ["detail"],
         "description": "",
         "parameters": [
           {
@@ -184,6 +213,7 @@
         "responses": {}
       },
       "put": {
+        "tags": ["detail"],
         "description": "",
         "parameters": [
           {
@@ -211,10 +241,14 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       },
       "delete": {
+        "tags": ["detail"],
         "description": "",
         "parameters": [
           {
@@ -239,12 +273,16 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       }
     },
     "/posts/{count}/comment": {
       "post": {
+        "tags": ["comment"],
         "description": "",
         "parameters": [
           {
@@ -276,6 +314,7 @@
         }
       },
       "patch": {
+        "tags": ["comment"],
         "description": "",
         "parameters": [
           {
@@ -313,6 +352,7 @@
         }
       },
       "delete": {
+        "tags": ["comment"],
         "description": "",
         "parameters": [
           {
@@ -340,6 +380,9 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           }
         }
       }

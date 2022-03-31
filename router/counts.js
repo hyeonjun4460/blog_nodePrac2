@@ -48,7 +48,7 @@ router.put('/:count/edit', async (req, res) => {
 
     }
     else {
-        res.json({ success: false, errormsg: '수정 권한이 없습니다.' })
+        res.status(401).json({ success: false, errormsg: '수정 권한이 없습니다.' })
     }
 })
 
@@ -67,7 +67,7 @@ router.delete('/:count/edit', async (req, res) => {
         res.json({ success: true, msg: '삭제했습니다.' })
     }
     else {
-        res.json({ success: false, errormsg: '삭제 권한이 없습니다.' })
+        res.status(401).json({ success: false, errormsg: '삭제 권한이 없습니다.' })
     }
 })
 
@@ -128,7 +128,7 @@ router.delete('/:count/comment', async (req, res) => {
         res.json({ success: true, msg: '삭제했습니다.' })
     }
     else {
-        res.json({ suceess: false, msg: '게시글을 다시 확인해주세요.' })
+        res.status(400).json({ suceess: false, msg: '게시글을 다시 확인해주세요.' })
     }
 })
 
