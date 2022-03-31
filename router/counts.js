@@ -6,6 +6,7 @@ const joimiddleware = require('../middlewares/joi')
 const saltRounds = 10;
 const bcrypt = require('bcrypt')
 const authMiddleware = require('../middlewares/auth-middleware')
+const SECRET_KEY = process.env.SECRETKEY
 
 // DB
 const User = require('../schemas/user')
@@ -37,7 +38,7 @@ router.put('/:count/edit', async (req, res) => {
     const Count = req.params.count
     // request된 비밀번호, 수정 내용 가져오기
     const { content, tokenid } = req.body
-    const { userId } = jwt.verify(tokenid, 'my-secret-key')
+    const { userId } = jwt.verify(tokenid, process.env.SECRET_KEY)
     const existpost = await Posts.find({ count: Number(Count), userId_DB: userId }, { _id: false })
     // existpost의 암호화된 비밀번호와 request받은 비밀번호 비교하기.
     // 게시글이 존재하고, 비밀번호가 동일하면 삭제
@@ -55,7 +56,7 @@ router.put('/:count/edit', async (req, res) => {
 router.delete('/:count/edit', async (req, res) => {
     const Count = req.params.count
     const { tokenid } = req.body
-    const { userId } = jwt.verify(tokenid, 'my-secret-key')
+    const { userId } = jwt.verify(tokenid, process.env.SECRET_KEY)
     // 비밀번호 가져오기
     // 포스트 DB에서 상세 게시글 데이터 가져오기
     const existpost = await Posts.find({ count: Number(Count), userId_DB: userId }, { _id: false })
@@ -74,7 +75,7 @@ router.delete('/:count/edit', async (req, res) => {
 router.post('/:count/comment', async (req, res) => {
     const { count } = req.params
     const { tokenid, comment } = req.body
-    const { userId } = jwt.verify(tokenid, 'my-secret-key')
+    const { userId } = jwt.verify(tokenid, process.env.SECRET_KEY)
     // userId, comment 가져오기
     const userId_DB = await User.findOne({ _id: userId }).then((value) => { return value._id.toHexString() })
     // userDB에서 닉네임 가져오기
@@ -106,7 +107,7 @@ router.patch('/:count/comment', async (req, res) => {
     const { count } = req.params
     const postId_DB = await Posts.findOne({ count: Number(count) })
     const { tokenid, newComment, commentCount } = req.body
-    const { userId } = jwt.verify(tokenid, 'my-secret-key')
+    const { userId } = jwt.verify(tokenid, process.env.SECRET_KEY)
     const existcomment = await commentDB.findOne({ commentCount, userId_DB: userId })
     if (existcomment) {
         await commentDB.updateOne({ commentCount }, { $set: { comment: newComment } })
@@ -119,7 +120,7 @@ router.patch('/:count/comment', async (req, res) => {
 router.delete('/:count/comment', async (req, res) => {
     const { count } = req.params
     const { tokenid, commentCount } = req.body
-    const { userId } = jwt.verify(tokenid, 'my-secret-key')
+    const { userId } = jwt.verify(tokenid, process.env.SECRET_KEY)
     // comment db에서 commentCount를 가진 document 찾기
     const existcomment = await commentDB.findOne({ commentCount, userId_DB: userId })
     if (existcomment) {

@@ -19,10 +19,15 @@
   "homepage": "https://github.com/hyeonjun4460/blog_nodePrac#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "dotenv": "^16.0.0",
     "ejs": "^3.1.6",
     "express": "^4.17.3",
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.2.8"
+  },
+  "devDependencies": {
+    "swagger-autogen": "^2.20.7",
+    "swagger-ui-express": "^4.3.0"
   }
 }

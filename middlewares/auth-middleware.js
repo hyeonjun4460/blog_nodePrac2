@@ -2,7 +2,7 @@
 
 const User = require('../schemas/user')
 const jwt = require('jsonwebtoken')
-
+const SECRET_KEY = process.env.SECRET_KEY
 // 미들웨어를 모듈로서 다른 파일로 배송
 // 미들웨어이므로 반드시 next가 들어감.
 module.exports = (req, res, next) => {
@@ -22,7 +22,7 @@ module.exports = (req, res, next) => {
     // try: 토큰에 담긴 payload를 복호화해서 DB의 value와 비교하기.
     // catch: 에러메시지 + 리턴
     try {
-        const { userId } = jwt.verify(tokenValue, 'my-secret-key')
+        const { userId } = jwt.verify(tokenValue, process.env.SECRET_KEY)
         // DB 인증이 성공하면, 사용자 정보를 사용자에게 response하기.(promise를 반환하므로, then을 이용해서 이후 구문을 사용.)
         // res.loclas.user
         // => 아마 브라우저의 로컬스토리지와 같은 공간에 user라는 키에 value user를 할당해서 response하는 것.

@@ -5,6 +5,9 @@ const postsrouter = require('./router/posts')
 const countrouter = require('./router/counts')
 const connect = require('./schemas/index')
 const ejs = require('ejs')
+const swaggerUi = require('swagger-ui-express')
+const swaggerFile = require('./swagger-output')
+require('dotenv').config()
 connect()
 
 // 뷰 엔진 및 경로 설정
@@ -21,6 +24,7 @@ app.use(express.json()) // json 형식 이용
 app.use(requestlog) // 로그 남기기
 app.use('/posts', [postsrouter, countrouter]) // /posts 접속시, postrouter의 내용 response
 app.use(express.static('views'))
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 // 메인 페이지 생성 -> posts로 바로 이동하게 바꾸기
 app.get('/', (req, res) => {

@@ -6,6 +6,7 @@ const joimiddleware = require('../middlewares/joi')
 const saltRounds = 10;
 const bcrypt = require('bcrypt')
 const authMiddleware = require('../middlewares/auth-middleware')
+const key = process.env.SECRET_KEY
 
 // DB
 const Posts = require('../schemas/post')
@@ -50,7 +51,7 @@ router.post('/auth', async (req, res) => {
     }
     //  일치하다면, email을 가진 유저 찾기
     const user = await User.findOne({ nickname })
-    const token = jwt.sign({ userId: user.userId }, "my-secret-key");
+    const token = jwt.sign({ userId: user.userId }, process.env.SECRET_KEY);
     res.send({
         success: true,
         token,
@@ -108,7 +109,7 @@ router.get('/upload', (req, res) => {
 router.post('/upload', async (req, res) => {
     const { tokenid, title, content } = req.body
     // 토큰을 가진 사용자의 DB ID 가져오기
-    const { userId } = jwt.verify(tokenid, 'my-secret-key')
+    const { userId } = jwt.verify(tokenid, process.env.SECRET_KEY)
     const userId_DB = await User.findOne({ _id: userId }).then((value) => { return value._id.toHexString() })
     const nickname = await User.findOne({ _id: userId }).then((value) => { return value.nickname })
     const date = new Date()
