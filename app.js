@@ -1,10 +1,10 @@
 const express = require('express')
 const app = express()
 const port = 3000
-const postsrouter = require('./router/posts')
-const countrouter = require('./router/counts')
-const connect = require('./schemas/index')
-const ejs = require('ejs')
+const authRouter = require('./router/auth')
+const boradRouter = require('./router/boards')
+const commentRouter = require('./router/comments')
+const connect = require('./model/index')
 const swaggerUi = require('swagger-ui-express')
 const swaggerFile = require('./swagger-output')
 require('dotenv').config()
@@ -17,12 +17,11 @@ const requestlog = (req, res, next) => {
     console.log('requested url', req.originalUrl, '-', new Date())
     next()
 }
-
 // 미들워어
 app.use(express.urlencoded({ extended: false })) // form -urlencoded 이용
 app.use(express.json()) // json 형식 이용
 app.use(requestlog) // 로그 남기기
-app.use('/posts', [postsrouter, countrouter]) // /posts 접속시, postrouter의 내용 response
+app.use('/posts', [authRouter, boradRouter, commentRouter]) // /posts 접속시, postrouter의 내용 response
 app.use(express.static('views'))
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
@@ -35,4 +34,3 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
     console.log(port, '로 연결되었습니다.')
 })
-

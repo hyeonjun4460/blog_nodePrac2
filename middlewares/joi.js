@@ -1,6 +1,6 @@
 // 사용자 인증 미들웨어
 // 세팅
-const User = require('../schemas/user')
+const User = require('../model/user')
 const joi = require('joi')
 const bcrypt = require('bcrypt')
 

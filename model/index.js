@@ -1,7 +1,7 @@
 //  db 연결 스키마
 
 //  mongoDB 컨트롤 위한 모듈 생성
-const { default: mongoose } = require('mongoose')
+const { mongoose } = require('mongoose')
 const express = require('express')
 
 // db 연결

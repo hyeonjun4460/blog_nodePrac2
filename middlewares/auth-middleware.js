@@ -1,6 +1,6 @@
 // 사용자 인증 미들웨어
 
-const User = require('../schemas/user')
+const User = require('../model/user')
 const jwt = require('jsonwebtoken')
 const SECRET_KEY = process.env.SECRET_KEY
 // 미들웨어를 모듈로서 다른 파일로 배송
