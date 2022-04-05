@@ -1,8 +1,7 @@
 // 사용자 인증 미들웨어
-
 const User = require('../model/user')
 const jwt = require('jsonwebtoken')
-const SECRET_KEY = process.env.SECRET_KEY
+
 // 미들웨어를 모듈로서 다른 파일로 배송
 // 미들웨어이므로 반드시 next가 들어감.
 module.exports = (req, res, next) => {
@@ -35,7 +34,7 @@ module.exports = (req, res, next) => {
     }
     // verify 에러 시 실행.
     catch (error) {
-        res.status(401).send({
+        res.status(401).json({
             errorMessage: '로그인 후 사용하세요.'
         })
         return

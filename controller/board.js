@@ -3,6 +3,12 @@ const Posts = require('../model/post');
 const User = require('../model/user');
 const commentDB = require('../model/comment');
 
+function getUpload() {
+    return (req, res) => {
+        res.render('../views/post');
+    };
+}
+
 function deletePost() {
     return async (req, res) => {
         const Count = req.params.count;
@@ -104,4 +110,6 @@ function showBoards() {
     };
 }
 
-module.exports = { deletePost, editPost, showDetailPage, showPost, createPost, showBoards }
+
+
+module.exports = { getUpload, deletePost, editPost, showDetailPage, showPost, createPost, showBoards }
